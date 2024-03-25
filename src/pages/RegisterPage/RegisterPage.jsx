@@ -88,6 +88,9 @@ const RegisterPage = () => {
 
                 <Button color="primary" variant="contained" type="submit">Register</Button>
             </form>
+            <p>
+                Already have an account? <a href="/login">Log in</a>
+            </p>
         </FormContainer>
     );
 };
