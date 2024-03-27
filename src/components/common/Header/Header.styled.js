@@ -1,9 +1,16 @@
 import styled from '@emotion/styled';
 import {AppBar, Button, Toolbar} from '@mui/material';
 
+
 export const StyledAppBar = styled(AppBar)`
+    position: fixed; // This line fixes the AppBar at the top
+    top: 0; // Ensures it sticks to the top of the viewport
+    left: 0; // Aligns it to the left of the viewport
+    right: 0; // Ensures it stretches across the full width of the viewport
     margin-bottom: 20px;
+    z-index: 1100; // Sets a high z-index to ensure it stays on top of other content
 `;
+
 
 export const StyledToolbar = styled(Toolbar)`
     justify-content: space-between;
