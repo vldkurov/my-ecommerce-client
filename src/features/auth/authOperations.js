@@ -16,6 +16,45 @@ export const register = createAsyncThunk('auth/register', async (userData, {reje
     }
 });
 
+export const login = createAsyncThunk('auth/login', async (loginData, {rejectWithValue}) => {
+    try {
+        const response = await api.post('/users/login', loginData, {
+            withCredentials: true // Ensures cookies are sent with the request
+        });
+        // Assume the response body includes the user data you want to store
+        return response.data; // This should include the user object or relevant user data
+    } catch (error) {
+        if (!error.response) {
+            throw error;
+        }
+        return rejectWithValue(error.response.data);
+    }
+});
+
+// export const logout = createAsyncThunk(
+//     "auth/logout",
+//     async (_, {rejectWithValue}) => {
+//         try {
+//             const result = await api.logout();
+//             return result;
+//         } catch ({response}) {
+//             return rejectWithValue(response.data);
+//         }
+//     }
+// )
+
+export const logout = createAsyncThunk(
+    'user/logout',
+    async (_, thunkAPI) => {
+        try {
+            const response = await api.post('/users/logout', {withCredentials: true});
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
+
 export const check = createAsyncThunk(
     'user/checkStatus',
     async (_, thunkAPI) => {
@@ -28,25 +67,5 @@ export const check = createAsyncThunk(
     }
 );
 
-// export const checkAuthStatus = createAsyncThunk(
-//     'auth/checkStatus',
-//     async (_, {rejectWithValue}) => {
-//         try {
-//             const response = await api.get('/users/check', {
-//                 // Don't throw an error for any HTTP status
-//                 validateStatus: () => true
-//             });
-//             // Directly handle the response based on the status code
-//             if (response.status === 401) {
-//                 // Explicitly handling 401 without marking the action as rejected
-//                 return {isAuthenticated: false};
-//             }
-//             return response.data;
-//         } catch (error) {
-//             // Handle unexpected errors
-//             return rejectWithValue(error.message);
-//         }
-//     }
-// );
 
 
