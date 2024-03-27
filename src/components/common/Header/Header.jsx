@@ -1,7 +1,7 @@
 import React from 'react';
-import {NavLink as RouterNavLink, useLocation} from 'react-router-dom';
-// import {useDispatch} from 'react-redux';
-// import {logout} from "../../../features/auth/authSlice";
+import {NavLink as RouterNavLink, useLocation, useNavigate} from 'react-router-dom';
+import {useDispatch} from 'react-redux';
+import {logout} from '../../../features/auth/authOperations'
 import {StyledAppBar, StyledNavLink, StyledToolbar} from './Header.styled';
 import {Box, Button} from "@mui/material";
 // import api from "../../../api/api";
@@ -10,13 +10,13 @@ import {Box, Button} from "@mui/material";
 
 function Header() {
     const location = useLocation();
-    // const dispatch = useDispatch();
+    const dispatch = useDispatch();
     // const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
     // const {isAuthenticated} = useAuth();
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const handleLogout = async () => {
-        // dispatch(logout());
+        dispatch(logout());
 
         // // Making a POST request to the logout endpoint using Axios
         // await api.post('/users/logout', {}, {
@@ -32,7 +32,7 @@ function Header() {
         //         console.error('Logout failed', error);
         //     });
         //
-        // navigate('/');
+        navigate('/');
     };
 
 
@@ -52,6 +52,10 @@ function Header() {
                                    $isactive={location.pathname === '/checkout'}>
                         Checkout
                     </StyledNavLink>
+                    {/*<StyledNavLink component={RouterNavLink} to="/protected"*/}
+                    {/*               $isactive={location.pathname === '/protected'}>*/}
+                    {/*    Protected*/}
+                    {/*</StyledNavLink>*/}
                 </Box>
 
                 {/* Auth segment */}

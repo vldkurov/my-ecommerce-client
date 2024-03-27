@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {check, register} from './authOperations'
+import {check, login, logout, register} from './authOperations'
 
 
 const initialState = {
@@ -14,11 +14,7 @@ const initialState = {
 const authSlice = createSlice({
     name: 'auth',
     initialState,
-    reducers: {
-        // logout: (state) => {
-        //     Object.assign(state, initialState);
-        // },
-    },
+    reducers: {},
     extraReducers: (builder) => {
         builder
             .addCase(register.pending, (state) => {
@@ -39,23 +35,24 @@ const authSlice = createSlice({
                 state.error = action.payload; // Assuming the backend responds with error messages
 
             })
-            // .addCase(loginUser.pending, (state) => {
-            //     state.status = 'loading';
-            //     state.loading = true;
-            // })
-            // .addCase(loginUser.fulfilled, (state, action) => {
-            //     state.status = 'succeeded';
-            //     state.user = action.payload.user; // Assume payload contains user data
-            //     // state.isLoggedIn = true;
-            //     state.isAuthenticated = true;
-            //     state.loading = false;
-            //     state.error = null;
-            // })
-            // .addCase(loginUser.rejected, (state, action) => {
-            //     state.status = 'failed';
-            //     state.error = action.payload;
-            //     state.loading = false;
-            // })
+            .addCase(login.pending, (state) => {
+                state.status = 'loading';
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(login.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.loading = false;
+                state.user = action.payload.user; // Assume payload contains user data
+                state.isAuthenticated = true;
+                state.error = null;
+            })
+            .addCase(login.rejected, (state, action) => {
+                state.status = 'failed';
+                state.loading = false;
+                state.error = action.payload;
+
+            })
             .addCase(check.fulfilled, (state, action) => {
                 state.loading = false;
                 state.status = 'succeeded';
@@ -75,9 +72,24 @@ const authSlice = createSlice({
                 state.error = action.error.message; // Update the error state if needed
 
             })
+            .addCase(logout.pending, state => {
+                state.loading = true;
+                state.status = 'loading';
+                state.error = null;
+            })
+            .addCase(logout.fulfilled, (state) => {
+                // state.loading = false;
+                // state.user = {};
+                // state.token = "";
+                // state.isLogin = false;
+                Object.assign(state, initialState);
+            })
+            .addCase(logout.rejected, (state, {payload}) => {
+                state.loading = false;
+                state.status = 'failed';
+                state.error = payload;
+            })
     },
 });
-
-// export const {logout} = authSlice.actions;
 
 export default authSlice.reducer;
