@@ -3,8 +3,10 @@ import {useDispatch, useSelector} from 'react-redux';
 import ProductCard from "../../components/ProductCard/ProductCard";
 import Box from '@mui/material/Box';
 import {fetchProducts} from '../../features/products/productsOperations';
+import {useParams} from "react-router-dom";
 
-const ProductsPage = ({categoryId}) => {
+const ProductsByCategoryPage = () => {
+    const {categoryId} = useParams();
     const dispatch = useDispatch();
     const {products, status, error} = useSelector((state) => state.products);
 
@@ -33,6 +35,6 @@ const ProductsPage = ({categoryId}) => {
     );
 };
 
-export default ProductsPage;
+export default ProductsByCategoryPage;
 
 

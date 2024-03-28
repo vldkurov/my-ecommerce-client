@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {NavLink as RouterNavLink, useLocation, useNavigate} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import {logout} from '../../../features/auth/authOperations'
-import {StyledAppBar, StyledNavLink, StyledToolbar} from './Header.styled';
+import {StyledAppBar, StyledCategoryButton, StyledNavLink, StyledToolbar} from './Header.styled';
 import {Box, Button} from "@mui/material";
+import CategoriesModal from "../../CategoriesModal/CategoriesModal";
 
 // import {useAuth} from "../../../hooks/useAuth";
 
@@ -13,6 +14,16 @@ function Header() {
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
     // const {isAuthenticated} = useAuth();
     const navigate = useNavigate();
+    const [open, setOpen] = useState(false);
+
+    const isCategoryPageActive = location.pathname.startsWith("/products/all/") && location.pathname.split("/").length > 3;
+
+    // const {categories} = useSelector((state) => state.categories);
+
+
+    const handleClose = () => setOpen(false);
+    const handleOpen = () => setOpen(true);
+
 
     const handleLogout = async () => {
         dispatch(logout())
@@ -28,7 +39,6 @@ function Header() {
             });
     };
 
-
     return (
         <StyledAppBar position="static">
             <StyledToolbar>
@@ -37,10 +47,19 @@ function Header() {
                     <StyledNavLink component={RouterNavLink} to="/" $isactive={location.pathname === '/'}>
                         Home
                     </StyledNavLink>
-                    <StyledNavLink component={RouterNavLink} to="/products"
-                                   $isactive={location.pathname === '/products'}>
+                    <StyledNavLink component={RouterNavLink} to="/products/all"
+                                   $isactive={location.pathname === '/products/all'}>
                         Products
                     </StyledNavLink>
+                    {/*<Button color="inherit" onClick={handleOpen}>By Category</Button>*/}
+                    <StyledCategoryButton
+                        color="inherit"
+                        onClick={handleOpen}
+                        // $isactive={open} // Assuming you want to show it as active when the modal is open
+                        $isactive={isCategoryPageActive || open}
+                    >
+                        By Category
+                    </StyledCategoryButton>
                     <StyledNavLink component={RouterNavLink} to="/checkout"
                                    $isactive={location.pathname === '/checkout'}>
                         Checkout
@@ -49,6 +68,7 @@ function Header() {
                     {/*               $isactive={location.pathname === '/protected'}>*/}
                     {/*    Protected*/}
                     {/*</StyledNavLink>*/}
+
                 </Box>
 
                 {/* Auth segment */}
@@ -68,6 +88,7 @@ function Header() {
                         <Button color="inherit" onClick={handleLogout}>Log Out</Button>
                     )}
                 </Box>
+                <CategoriesModal open={open} onClose={handleClose}/>
             </StyledToolbar>
         </StyledAppBar>
     );

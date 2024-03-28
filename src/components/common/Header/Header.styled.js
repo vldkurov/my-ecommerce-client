@@ -19,9 +19,19 @@ export const StyledToolbar = styled(Toolbar)`
 // Updated StyledNavLink to correctly filter out the `$isactive` prop
 export const StyledNavLink = styled(Button, {
     shouldForwardProp: (prop) => !['$isactive'].includes(prop),
-})(({$isactive, theme}) => ({
+})(({$isactive}) => ({
     color: 'white !important', // Ensure text color is white
     textDecoration: 'none',
     marginRight: '20px', // Adds some spacing between the nav links
     border: $isactive ? '1px solid white' : 'none', // Apply border based on $isactive
+}));
+
+export const StyledCategoryButton = styled(Button, {
+    shouldForwardProp: (prop) => !['$isactive'].includes(prop),
+})(({$isactive}) => ({
+    color: 'white !important', // Ensure text color is white
+    textDecoration: 'none',
+    marginRight: '20px', // Adds some spacing between the nav links
+    border: $isactive ? '1px solid white' : 'none', // Apply border based on $isactive
+    // Add any other styling to match StyledNavLink
 }));

@@ -2,12 +2,12 @@ import React, {useEffect} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchProductDetails} from '../../features/product/productOperations';
-import {Card, CardContent, CardMedia, Typography} from '@mui/material';
+import {Box, Card, CardContent, CardMedia, Typography} from '@mui/material';
 import {StyledButton, StyledCardActions} from "./ProductDetailPage.styled";
 
 const ProductDetailPage = () => {
     const {productId} = useParams();
-    const navigate = useNavigate(); // Use useNavigate hook
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const {product, status, error} = useSelector((state) => state.product);
 
@@ -19,12 +19,11 @@ const ProductDetailPage = () => {
     if (status === 'failed') return <p>Error: {error}</p>;
 
     const handleBack = () => {
-        // navigate(-1); // Navigate back
-        navigate('/products'); // Navigate back
+        navigate('/products/all'); // Adjust as needed for your routing
     };
 
     return product ? (
-        <Card>
+        <Card sx={{mt: 1}}>
             <CardMedia
                 component="img"
                 height="250"
@@ -41,6 +40,15 @@ const ProductDetailPage = () => {
                 <Typography variant="h6" color="text.primary">
                     Price: {product.price}
                 </Typography>
+                {/* Display Category Name and Description */}
+                <Box sx={{mt: 2}}> {/* Add spacing above the category details */}
+                    <Typography variant="subtitle1" color="text.primary">
+                        Category: {product.category?.name || 'No Category'}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        {product.category?.description || 'No Description'}
+                    </Typography>
+                </Box>
                 <StyledCardActions>
                     <StyledButton size="small" onClick={handleBack}>
                         Back to Products List
@@ -52,5 +60,4 @@ const ProductDetailPage = () => {
 };
 
 export default ProductDetailPage;
-
 

@@ -6,7 +6,8 @@ import Layout from "../components/common/Layout/Layout";
 const HomePage = lazy(() => import('../pages/HomePage/HomePage'));
 const RegisterPage = lazy(() => import('../pages/RegisterPage/RegisterPage'));
 const LoginPage = lazy(() => import('../pages/LoginPage/LoginPage'));
-const ProductPage = lazy(() => import('../pages/ProductsPage/ProductsPage'));
+const ProductsPage = lazy(() => import('../pages/ProductsPage/ProductsPage'));
+const ProductsByCategoryPage = lazy(() => import('../pages/ProductsByCategoryPage/ProductsByCategoryPage'))
 const ProductDetailPage = lazy(() => import('../pages/ProductDetailPage/ProductDetailPage'));
 const CheckoutPage = lazy(() => import('../pages/CheckoutPage/CheckoutPage'));
 // const ProtectedPage = lazy(() => import('../pages/ProtectedPage/ProtectedPage'));
@@ -21,7 +22,8 @@ const AppRoutes = () => {
                     <Route path="/" element={<HomePage/>}/>
                     <Route path="/register" element={<RegisterPage/>}/>
                     <Route path="/login" element={<LoginPage/>}/>
-                    <Route path="/products" element={<ProductPage/>}/>
+                    <Route path="/products/all" element={<ProductsPage/>}/>
+                    <Route path="/products/all/:categoryId" element={<ProductsByCategoryPage/>}/>
                     <Route path="/products/:productId" element={<ProductDetailPage/>}/>
                     <Route path="/checkout" element={<CheckoutPage/>}/>
                     {/*<Route path="/protected" element={<PrivateRoute element={<ProtectedPage/>}/>}/>*/}
