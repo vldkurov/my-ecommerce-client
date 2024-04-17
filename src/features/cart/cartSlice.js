@@ -73,7 +73,7 @@ const cartSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.payload;
             })
-            .addCase(login.fulfilled, (state, action) => {
+            .addCase(login.fulfilled, (state) => {
                 state.error = null;
             })
             .addCase(logout.fulfilled, (state) => {

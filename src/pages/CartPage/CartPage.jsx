@@ -4,6 +4,7 @@ import {deleteProductFromCart, fetchCartContents} from '../../features/cart/cart
 import {
     Alert,
     Box,
+    Button,
     IconButton,
     Paper,
     Snackbar,
@@ -13,15 +14,16 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    TextField,
     Typography
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
+import {createOrderFromCart} from "../../features/orders/ordersOperations";
 
 const CartPage = () => {
     const {cartId} = useParams();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [tax, setTax] = useState(0);
     const [total, setTotal] = useState(0);
     const [taxAmount, setTaxAmount] = useState(0);
@@ -54,22 +56,17 @@ const CartPage = () => {
         }
     }, [items, tax]);
 
-    const handleTaxChange = (event) => {
-        const newTax = parseFloat(event.target.value);
-        setTax(newTax);
-    };
-
-    useEffect(() => {
-        const newTaxAmount = total * (tax / 100);
-        setTaxAmount(newTaxAmount);
-        setTotalWithTax(total + newTaxAmount);
-    }, [tax, total]);
-
-    // const handleDelete = (itemId) => {
-    //     dispatch(deleteProductFromCart({cartId, itemId}));
-    //     setSnackbarMessage('Item deleted successfully!');
-    //     setOpen(true);
+    // const handleTaxChange = (event) => {
+    //     const newTax = parseFloat(event.target.value);
+    //     setTax(newTax);
     // };
+    //
+    // useEffect(() => {
+    //     const newTaxAmount = total * (tax / 100);
+    //     setTaxAmount(newTaxAmount);
+    //     setTotalWithTax(total + newTaxAmount);
+    // }, [tax, total]);
+
 
     const handleDelete = (itemId) => {
         dispatch(deleteProductFromCart({cartId, itemId}));
@@ -84,17 +81,37 @@ const CartPage = () => {
         setOpen(false);
     };
 
+    const handleCheckout = () => {
+        dispatch(createOrderFromCart())
+            .unwrap()
+            .then(() => {
+                navigate('/checkout');
+            })
+            .catch((error) => {
+                console.error('Failed to create order:', error);
+                // Optionally handle the error, e.g., show an error message
+            });
+    };
+
+
     if (status === 'loading') return <p>Loading cart...</p>;
     if (status === 'failed') return <p>Error: {error.toString()}</p>;
+    if (!items || items.length === 0) return <p>Your cart is empty.</p>;
 
     return (
         <Box sx={{padding: 2}}>
+            <Button variant="contained" color="primary" onClick={handleCheckout}>
+                Go to Checkout
+            </Button>
             <TableContainer component={Paper}>
                 <Table sx={{minWidth: 650}} aria-label="cart table">
                     <TableHead>
                         <TableRow>
-                            <TableCell><Typography variant="subtitle1"
-                                                   style={{fontWeight: 'bold'}}>No.</Typography></TableCell>
+                            <TableCell>
+                                <Typography variant="subtitle1"
+                                            style={{fontWeight: 'bold'}}>No.
+                                </Typography>
+                            </TableCell>
                             <TableCell align="right"><Typography variant="subtitle1" style={{fontWeight: 'bold'}}>Product
                                 ID</Typography></TableCell>
                             <TableCell align="right"><Typography variant="subtitle1" style={{fontWeight: 'bold'}}>Product
@@ -135,22 +152,22 @@ const CartPage = () => {
                     Quantity: {items.reduce((acc, item) => acc + item.quantity, 0)}</Typography>
                 <Typography variant="h6">Total Amount: £{total.toFixed(2)}</Typography>
             </Box>
-            <Box sx={{mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>
-                <TextField
-                    label="Tax Rate (%)"
-                    type="number"
-                    InputProps={{inputProps: {min: 0, max: 100}}}
-                    value={tax}
-                    onChange={handleTaxChange}
-                    size="small"
-                    sx={{width: 100, mr: 2}}
-                />
-                <Typography variant="h6">Tax Amount: £{taxAmount.toFixed(2)}</Typography>
-            </Box>
-            <Typography variant="h6" sx={{mt: 2, fontWeight: 'bold', display: 'flex', justifyContent: 'flex-end'}}>Total
-                Including Tax:
-                £{totalWithTax.toFixed(2)}
-            </Typography>
+            {/*<Box sx={{mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>*/}
+            {/*    <TextField*/}
+            {/*        label="Tax Rate (%)"*/}
+            {/*        type="number"*/}
+            {/*        InputProps={{inputProps: {min: 0, max: 100}}}*/}
+            {/*        value={tax}*/}
+            {/*        onChange={handleTaxChange}*/}
+            {/*        size="small"*/}
+            {/*        sx={{width: 100, mr: 2}}*/}
+            {/*    />*/}
+            {/*    <Typography variant="h6">Tax Amount: £{taxAmount.toFixed(2)}</Typography>*/}
+            {/*</Box>*/}
+            {/*<Typography variant="h6" sx={{mt: 2, fontWeight: 'bold', display: 'flex', justifyContent: 'flex-end'}}>Total*/}
+            {/*    Including Tax:*/}
+            {/*    £{totalWithTax.toFixed(2)}*/}
+            {/*</Typography>*/}
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success" sx={{width: '100%'}}>
                     {snackbarMessage}

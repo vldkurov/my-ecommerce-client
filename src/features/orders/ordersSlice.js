@@ -1,10 +1,10 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {fetchOrderById, fetchOrders} from "./ordersOperations";
+import {createOrderFromCart, fetchOrderById, fetchOrders} from "./ordersOperations";
 
 const initialState = {
     orders: [],
     currentOrder: null,
-    status: 'idle', // 'idle', 'loading', 'succeeded', 'failed'
+    status: 'idle', // 'idle', 'loading', 'succeeded', 'failed', 'pending', 'completed', 'cancelled'
     error: null,
 };
 
@@ -33,6 +33,18 @@ const ordersSlice = createSlice({
                 state.currentOrder = action.payload;
             })
             .addCase(fetchOrderById.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload;
+            })
+            .addCase(createOrderFromCart.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(createOrderFromCart.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.currentOrder = action.payload;  // Set the current order to the newly created order
+                localStorage.setItem('currentOrderId', action.payload.orderId);
+            })
+            .addCase(createOrderFromCart.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.payload;
             });

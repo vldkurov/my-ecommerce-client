@@ -11,6 +11,8 @@ const ProductsByCategoryPage = lazy(() => import('../pages/ProductsByCategoryPag
 const ProductDetailsPage = lazy(() => import('../pages/ProductDetailsPage/ProductDetailsPage'));
 const CartPage = lazy(() => import('../pages/CartPage/CartPage'))
 const CheckoutPage = lazy(() => import('../pages/CheckoutPage/CheckoutPage'));
+const OrdersPage = lazy(() => import('../pages/OrdersPage/OrdersPage'));
+const OrderDetailsPage = lazy(() => import('../pages/OrderDetailsPage/OrderDetailsPage'))
 // const ProtectedPage = lazy(() => import('../pages/ProtectedPage/ProtectedPage'));
 const NotFoundPage = lazy(() => import('../pages/NotFoundPage/NotFoundPage'));
 
@@ -28,6 +30,8 @@ const AppRoutes = () => {
                     <Route path="/products/:productId" element={<ProductDetailsPage/>}/>
                     <Route path="/cart/:cartId" element={<CartPage/>}/>
                     <Route path="/checkout" element={<CheckoutPage/>}/>
+                    <Route path="/orders" element={<OrdersPage/>}/>
+                    <Route path="/orders/:orderId" element={<OrderDetailsPage/>}/>
                     {/*<Route path="/protected" element={<PrivateRoute element={<ProtectedPage/>}/>}/>*/}
                     <Route path="*" element={<NotFoundPage/>}/>
                 </Routes>

@@ -27,19 +27,6 @@ function Header() {
     const handleClose = () => setOpen(false);
     const handleOpen = () => setOpen(true);
 
-    // const handleLogout = async () => {
-    //     dispatch(logout())
-    //         .then(response => {
-    //             // Handle response after successful logout
-    //             console.log(response.payload);
-    //             // You might want to redirect the user to the login page or home page here
-    //             navigate('/');
-    //         })
-    //         .catch(error => {
-    //             // Handle errors, such as network errors or server being unreachable
-    //             console.error('Logout failed', error);
-    //         });
-    // };
 
     const handleLogout = async () => {
         dispatch(logout())
@@ -78,25 +65,21 @@ function Header() {
                     </StyledCategoryButton>
                     {isAuthenticated && cartId && (
                         <>
-                            {/*<StyledNavLink component={RouterNavLink} to={`/cart/${cartId}`}*/}
-                            {/*               $isactive={location.pathname === `/cart/${cartId}`}>*/}
-                            {/*    <ShoppingCartIcon/> Cart ({cartItemCount})*/}
-                            {/*</StyledNavLink>*/}
-
                             <StyledNavLink component={RouterNavLink} to={`/cart/${cartId}`}
                                            $isactive={location.pathname.includes(`/cart/${cartId}`)}>
                                 <ShoppingCartIcon/> Cart ({cartItemCount})
                             </StyledNavLink>
-
-
                             <StyledNavLink component={RouterNavLink} to="/checkout"
                                            $isactive={location.pathname === '/checkout'}>
                                 Checkout
                             </StyledNavLink>
+                            <StyledNavLink component={RouterNavLink} to="/orders"
+                                           $isactive={location.pathname === '/orders'}>
+                                Orders
+                            </StyledNavLink>
                         </>
                     )}
                 </Box>
-
                 {/* Auth segment */}
                 <Box>
                     {!isAuthenticated ? (
