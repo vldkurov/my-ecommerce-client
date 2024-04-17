@@ -1,5 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {createOrderFromCart, fetchOrderById, fetchOrders} from "./ordersOperations";
+import {cancelOrder, createOrderFromCart, fetchOrderById, fetchOrders} from "./ordersOperations";
 
 const initialState = {
     orders: [],
@@ -45,6 +45,18 @@ const ordersSlice = createSlice({
                 localStorage.setItem('currentOrderId', action.payload.orderId);
             })
             .addCase(createOrderFromCart.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload;
+            })
+            .addCase(cancelOrder.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(cancelOrder.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.currentOrder = null;  // Optionally clear current order details
+                // alert(action.payload.message);  // Optional: alert user of success
+            })
+            .addCase(cancelOrder.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.payload;
             });

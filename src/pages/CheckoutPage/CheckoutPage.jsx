@@ -13,13 +13,15 @@ import {
     TextField,
     Typography
 } from '@mui/material';
-import {deleteOrder, fetchOrderById} from "../../features/orders/ordersOperations";
+import {cancelOrder, fetchOrderById} from "../../features/orders/ordersOperations";
 
 function CheckoutPage() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const order = useSelector((state) => state.orders.currentOrder);
     const orderId = localStorage.getItem('currentOrderId');  // Получаем orderId из LocalStorage
+    const orderStatus = useSelector((state) => state.orders.status);
+    const orderError = useSelector((state) => state.orders.error);
     const [tax, setTax] = useState(0);
     const [taxAmount, setTaxAmount] = useState(0);
     const [totalWithTax, setTotalWithTax] = useState(0);
@@ -52,13 +54,21 @@ function CheckoutPage() {
         navigate(`/orders/${orderId}`); // Navigate to order details page
     };
 
-    const handleRemoveOrder = () => {
-        dispatch(deleteOrder(orderId));
+    const handleCancelOrder = () => {
+        dispatch(cancelOrder(orderId))
         localStorage.removeItem('currentOrderId');  // Удаляем orderId из LocalStorage после удаления заказа
-        navigate('/cart'); // Navigate back to the cart or home page after deletion
+        navigate(`/orders/${orderId}`); // Navigate back to the cart or home page after deletion
     };
 
-    if (!order) return <div>Loading...</div>;
+    // const handleCancelOrder = () => {
+    //     if (order && order.orderId) {
+    //         dispatch(cancelOrder(order.orderId));
+    //     }
+    // };
+
+    if (orderStatus === 'loading') return <div>Loading...</div>;
+    if (orderStatus === 'failed') return <div>Error: {orderError}</div>;
+    if (!order || order.status === 'cancelled') return <div>No order details available or order was cancelled.</div>;
 
     return (
         <Box sx={{p: 2}}>
@@ -106,8 +116,8 @@ function CheckoutPage() {
                 <Button variant="contained" color="primary" onClick={handleConfirmOrder}>
                     Confirm Order
                 </Button>
-                <Button variant="contained" color="secondary" onClick={handleRemoveOrder}>
-                    Remove Order
+                <Button variant="contained" color="secondary" onClick={handleCancelOrder}>
+                    Cancel Order
                 </Button>
             </Box>
         </Box>
