@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchProductDetails} from '../../features/product/productOperations';
-import {addProductToCart, createCart} from '../../features/cart/cartOperations'; // Import the thunks
+import {addProductToCart, createCart, fetchCartContents} from '../../features/cart/cartOperations'; // Import the thunks
 import {Alert, Box, Card, CardContent, CardMedia, Snackbar, TextField, Typography} from '@mui/material';
 import {StyledButton} from "./ProductDetailsPage.styled";
 
@@ -12,7 +12,7 @@ const ProductDetailsPage = () => {
     const dispatch = useDispatch();
     const {product, status, error} = useSelector((state) => state.product);
     const [quantity, setQuantity] = useState(1); // State to track selected quantity
-    const cart = useSelector((state) => state.cart); // Assuming cart state structure
+    const cart = useSelector((state) => state.cart.cart); // Assuming cart state structure
     const [snackbarOpen, setSnackbarOpen] = useState(false);
 
 
@@ -21,7 +21,9 @@ const ProductDetailsPage = () => {
     }, [dispatch, productId]);
 
     const handleAddToCart = async () => {
-        let currentCartId = cart.cartId;
+        let currentCartId = cart?.cartId;
+
+
         if (!currentCartId) {
             const newCartAction = await dispatch(createCart());
             if (newCartAction.meta.requestStatus === 'fulfilled') {
@@ -38,11 +40,12 @@ const ProductDetailsPage = () => {
             quantity
         }));
 
+
         if (actionResult.meta.requestStatus === 'fulfilled') {
-            setSnackbarOpen(true); // Show success message
-            setTimeout(() => {
-                navigate('/products/all'); // Navigate back to products after showing the message
-            }, 2000); // Adjust delay as necessary
+
+            await dispatch(fetchCartContents(currentCartId));
+            setSnackbarOpen(true);
+            navigate(`/cart/${currentCartId}`);
         }
     };
 
@@ -57,8 +60,12 @@ const ProductDetailsPage = () => {
     if (status === 'failed') return <p>Error: {error}</p>;
 
     const handleBack = () => {
-        navigate('/products/all'); // Adjust as needed for your routing
+        navigate('/products/all');
     };
+
+    if (!cart) {
+        return <p>Loading cart information...</p>;
+    }
 
     return product ? (
         <Card sx={{mt: 1}}>

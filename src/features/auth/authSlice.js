@@ -80,10 +80,10 @@ const authSlice = createSlice({
             .addCase(logout.fulfilled, (state) => {
                 Object.assign(state, initialState);
             })
-            .addCase(logout.rejected, (state, {payload}) => {
+            .addCase(logout.rejected, (state, action) => {
                 state.loading = false;
                 state.status = 'failed';
-                state.error = payload;
+                state.error = action.payload;
             })
     },
 });
