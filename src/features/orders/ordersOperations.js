@@ -57,7 +57,7 @@ export const createOrderFromCart = createAsyncThunk(
 
 export const cancelOrder = createAsyncThunk('orders/cancelOrder', async (orderId, {getState, rejectWithValue}) => {
     try {
-        // const state = getState();
+        getState();
         const response = await api.patch(`/orders/${orderId}/cancel`);
         return response.data;
     } catch (error) {
