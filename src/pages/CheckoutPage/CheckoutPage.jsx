@@ -60,11 +60,6 @@ function CheckoutPage() {
         navigate(`/orders/${orderId}`); // Navigate back to the cart or home page after deletion
     };
 
-    // const handleCancelOrder = () => {
-    //     if (order && order.orderId) {
-    //         dispatch(cancelOrder(order.orderId));
-    //     }
-    // };
 
     if (orderStatus === 'loading') return <div>Loading...</div>;
     if (orderStatus === 'failed') return <div>Error: {orderError}</div>;
