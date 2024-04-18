@@ -24,10 +24,7 @@ const CartPage = () => {
     const {cartId} = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [tax, setTax] = useState(0);
     const [total, setTotal] = useState(0);
-    const [taxAmount, setTaxAmount] = useState(0);
-    const [totalWithTax, setTotalWithTax] = useState(0);
     const [open, setOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = React.useState('');
     const cart = useSelector((state) => state.cart);
@@ -50,22 +47,8 @@ const CartPage = () => {
         if (items) {
             const total = items.reduce((acc, item) => acc + item.quantity * parsePrice(item.product?.price || "0"), 0);
             setTotal(total);
-            const taxAmount = total * (tax / 100);
-            setTaxAmount(taxAmount);
-            setTotalWithTax(total + taxAmount);
         }
-    }, [items, tax]);
-
-    // const handleTaxChange = (event) => {
-    //     const newTax = parseFloat(event.target.value);
-    //     setTax(newTax);
-    // };
-    //
-    // useEffect(() => {
-    //     const newTaxAmount = total * (tax / 100);
-    //     setTaxAmount(newTaxAmount);
-    //     setTotalWithTax(total + newTaxAmount);
-    // }, [tax, total]);
+    }, [items]);
 
 
     const handleDelete = (itemId) => {
@@ -152,22 +135,6 @@ const CartPage = () => {
                     Quantity: {items.reduce((acc, item) => acc + item.quantity, 0)}</Typography>
                 <Typography variant="h6">Total Amount: £{total.toFixed(2)}</Typography>
             </Box>
-            {/*<Box sx={{mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>*/}
-            {/*    <TextField*/}
-            {/*        label="Tax Rate (%)"*/}
-            {/*        type="number"*/}
-            {/*        InputProps={{inputProps: {min: 0, max: 100}}}*/}
-            {/*        value={tax}*/}
-            {/*        onChange={handleTaxChange}*/}
-            {/*        size="small"*/}
-            {/*        sx={{width: 100, mr: 2}}*/}
-            {/*    />*/}
-            {/*    <Typography variant="h6">Tax Amount: £{taxAmount.toFixed(2)}</Typography>*/}
-            {/*</Box>*/}
-            {/*<Typography variant="h6" sx={{mt: 2, fontWeight: 'bold', display: 'flex', justifyContent: 'flex-end'}}>Total*/}
-            {/*    Including Tax:*/}
-            {/*    £{totalWithTax.toFixed(2)}*/}
-            {/*</Typography>*/}
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success" sx={{width: '100%'}}>
                     {snackbarMessage}
