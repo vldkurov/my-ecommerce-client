@@ -5,20 +5,23 @@ import {logout} from '../../../features/auth/authOperations'
 import {StyledAppBar, StyledCategoryButton, StyledNavLink, StyledToolbar} from './Header.styled';
 import {Box, Button} from "@mui/material";
 import CategoriesModal from "../../CategoriesModal/CategoriesModal";
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
-// import {useAuth} from "../../../hooks/useAuth";
 
 function Header() {
+
     const location = useLocation();
     const dispatch = useDispatch();
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-    // const {isAuthenticated} = useAuth();
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
+    const cart = useSelector((state) => state.cart.cart);
+    const cartId = cart?.cartId;
+    const cartItems = useSelector((state) => state.cart.items.items);
+    const cartItemCount = cartItems ? cartItems.length : 0;
+
 
     const isCategoryPageActive = location.pathname.startsWith("/products/all/") && location.pathname.split("/").length > 3;
-
-    // const {categories} = useSelector((state) => state.categories);
 
 
     const handleClose = () => setOpen(false);
@@ -27,17 +30,18 @@ function Header() {
 
     const handleLogout = async () => {
         dispatch(logout())
-            .then(response => {
-                // Handle response after successful logout
-                console.log(response.payload);
-                // You might want to redirect the user to the login page or home page here
+            .unwrap()
+            .then(() => {
                 navigate('/');
             })
             .catch(error => {
-                // Handle errors, such as network errors or server being unreachable
-                console.error('Logout failed', error);
+                // Assuming error is an object with a message key
+                const errorMessage = error.message || "Unknown error";
+                console.error('Logout failed', errorMessage);
+                alert(`Logout failed: ${errorMessage}`);
             });
     };
+
 
     return (
         <StyledAppBar position="static">
@@ -51,26 +55,31 @@ function Header() {
                                    $isactive={location.pathname === '/products/all'}>
                         Products
                     </StyledNavLink>
-                    {/*<Button color="inherit" onClick={handleOpen}>By Category</Button>*/}
+
                     <StyledCategoryButton
                         color="inherit"
                         onClick={handleOpen}
-                        // $isactive={open} // Assuming you want to show it as active when the modal is open
                         $isactive={isCategoryPageActive || open}
                     >
                         By Category
                     </StyledCategoryButton>
-                    <StyledNavLink component={RouterNavLink} to="/checkout"
-                                   $isactive={location.pathname === '/checkout'}>
-                        Checkout
-                    </StyledNavLink>
-                    {/*<StyledNavLink component={RouterNavLink} to="/protected"*/}
-                    {/*               $isactive={location.pathname === '/protected'}>*/}
-                    {/*    Protected*/}
-                    {/*</StyledNavLink>*/}
-
+                    {isAuthenticated && cartId && (
+                        <>
+                            <StyledNavLink component={RouterNavLink} to={`/cart/${cartId}`}
+                                           $isactive={location.pathname.includes(`/cart/${cartId}`)}>
+                                <ShoppingCartIcon/> Cart ({cartItemCount})
+                            </StyledNavLink>
+                            <StyledNavLink component={RouterNavLink} to="/checkout"
+                                           $isactive={location.pathname === '/checkout'}>
+                                Checkout
+                            </StyledNavLink>
+                            <StyledNavLink component={RouterNavLink} to="/orders"
+                                           $isactive={location.pathname === '/orders'}>
+                                Orders
+                            </StyledNavLink>
+                        </>
+                    )}
                 </Box>
-
                 {/* Auth segment */}
                 <Box>
                     {!isAuthenticated ? (

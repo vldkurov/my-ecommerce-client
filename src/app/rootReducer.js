@@ -4,6 +4,7 @@ import productsReducer from '../features/products/productsSlice'
 import productReducer from '../features/product/productSlice'
 import categoriesReducer from '../features/categories/categoriesSlice'
 import cartReducer from '../features/cart/cartSlice'
+import ordersReducer from '../features/orders/ordersSlice'
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
     product: productReducer,
     categories: categoriesReducer,
     cart: cartReducer,
+    orders: ordersReducer,
     // user: userReducer,
     // Add other slice reducers here as needed
 });
