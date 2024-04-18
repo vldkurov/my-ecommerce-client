@@ -51,7 +51,7 @@ const ordersSlice = createSlice({
             .addCase(cancelOrder.pending, (state) => {
                 state.status = 'loading';
             })
-            .addCase(cancelOrder.fulfilled, (state, action) => {
+            .addCase(cancelOrder.fulfilled, (state) => {
                 state.status = 'succeeded';
                 state.currentOrder = null;  // Optionally clear current order details
                 // alert(action.payload.message);  // Optional: alert user of success
