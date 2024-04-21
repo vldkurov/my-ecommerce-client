@@ -13,7 +13,7 @@ import {
     TextField,
     Typography
 } from '@mui/material';
-import {cancelOrder, fetchOrderById} from "../../features/orders/ordersOperations";
+import {cancelOrder, createPaymentSession, fetchOrderById} from "../../features/orders/ordersOperations";
 
 function CheckoutPage() {
     const dispatch = useDispatch();
@@ -25,6 +25,7 @@ function CheckoutPage() {
     const [tax, setTax] = useState(0);
     const [taxAmount, setTaxAmount] = useState(0);
     const [totalWithTax, setTotalWithTax] = useState(0);
+
 
     useEffect(() => {
         if (orderId) {
@@ -41,25 +42,34 @@ function CheckoutPage() {
         }
     }, [order, tax]);
 
+
     const handleTaxChange = (event) => {
         setTax(parseFloat(event.target.value));
     };
 
+
     const handleConfirmOrder = () => {
-        console.log('Order confirmed');
-        navigate('/thank-you'); // Redirect to a confirmation/thank you page
+        dispatch(createPaymentSession(orderId))
+            .unwrap()
+            .then((session) => {
+                window.location.href = session.url;
+            })
+            .catch((error) => {
+                console.error('Payment session creation failed:', error);
+                alert("Failed to initiate payment: " + error.message);
+            });
     };
 
+
     const handleViewDetails = () => {
-        navigate(`/orders/${orderId}`); // Navigate to order details page
+        navigate(`/orders/${orderId}`);
     };
 
     const handleCancelOrder = () => {
-        dispatch(cancelOrder(orderId))
-        localStorage.removeItem('currentOrderId');  // Удаляем orderId из LocalStorage после удаления заказа
-        navigate(`/orders/${orderId}`); // Navigate back to the cart or home page after deletion
+        dispatch(cancelOrder(orderId));
+        localStorage.removeItem('currentOrderId');
+        navigate(`/orders/${orderId}`);
     };
-
 
     if (orderStatus === 'loading') return <div>Loading...</div>;
     if (orderStatus === 'failed') return <div>Error: {orderError}</div>;
