@@ -14,40 +14,22 @@ export const fetchOrders = createAsyncThunk('orders/fetchAll', async (_, {reject
 export const fetchOrderById = createAsyncThunk('orders/fetchById', async (orderId, {rejectWithValue}) => {
     try {
         const response = await api.get(`/orders/${orderId}`);
-
-
         return response.data;
     } catch (error) {
         return rejectWithValue(error.toString());
     }
 });
 
-// export const createOrderFromCart = createAsyncThunk(
-//     'orders/createFromCart',
-//     async (_, {getState, rejectWithValue}) => {
-//         try {
-//             const state = getState();
-//             const cartId = state.cart.cart?.cartId;
-//             if (!cartId) {
-//                 return rejectWithValue('No cart available to create an order');
-//             }
-//             const response = await api.post('/orders', {cartId});  // Ensure your API expects cartId if needed
-//             return response.data;
-//         } catch (error) {
-//             return rejectWithValue(error.toString());
-//         }
-//     }
-// );
 
 export const createOrderFromCart = createAsyncThunk(
     'orders/createFromCart',
-    async (_, {getState, rejectWithValue}) => {
+    async (cartId, {rejectWithValue}) => {
         try {
-            const cartId = getState().cart.cart?.cartId;
+
             if (!cartId) {
                 return rejectWithValue('No cart available to create an order');
             }
-            const response = await api.post('/orders', {cartId});
+            const response = await api.post(`/carts/${cartId}/checkout`);
             return response.data;
         } catch (error) {
             return rejectWithValue(error.toString());
@@ -55,15 +37,31 @@ export const createOrderFromCart = createAsyncThunk(
     }
 );
 
-export const cancelOrder = createAsyncThunk('orders/cancelOrder', async (orderId, {getState, rejectWithValue}) => {
+export const cancelOrder = createAsyncThunk('orders/cancelOrder', async (orderId, {rejectWithValue}) => {
     try {
-        getState();
         const response = await api.patch(`/orders/${orderId}/cancel`);
         return response.data;
     } catch (error) {
         return rejectWithValue(error.response.data);
     }
 });
+
+
+export const createPaymentSession = createAsyncThunk('orders/createPaymentSession', async (orderId, {rejectWithValue}) => {
+    try {
+        const response = await api.post('/orders/create-checkout-session', {orderId});
+
+        return response.data;
+    } catch (error) {
+        return rejectWithValue(error.response.data);
+    }
+});
+
+
+
+
+
+
 
 
 

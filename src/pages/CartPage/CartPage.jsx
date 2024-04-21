@@ -63,12 +63,13 @@ const CartPage = () => {
         }
         setOpen(false);
     };
+    
 
-    const handleCheckout = () => {
-        dispatch(createOrderFromCart())
+    const handleCheckout = (cartId) => {
+        dispatch(createOrderFromCart(cartId))
             .unwrap()
             .then(() => {
-                navigate('/checkout');
+                navigate(`/carts/${cartId}/checkout`)
             })
             .catch((error) => {
                 console.error('Failed to create order:', error);
@@ -83,7 +84,9 @@ const CartPage = () => {
 
     return (
         <Box sx={{padding: 2}}>
-            <Button variant="contained" color="primary" onClick={handleCheckout}>
+            <Button variant="contained" color="primary"
+                    onClick={() => handleCheckout(cartId)}
+            >
                 Go to Checkout
             </Button>
             <TableContainer component={Paper}>
@@ -122,7 +125,7 @@ const CartPage = () => {
                                     align="right">£{(item.quantity * parsePrice(item.product?.price || "0")).toFixed(2)}</TableCell>
                                 <TableCell align="right">
                                     <IconButton color="error" onClick={() => handleDelete(item.cartItemId)}>
-                                        <DeleteIcon/> {/* This is a mock - functionality to be implemented */}
+                                        <DeleteIcon/>
                                     </IconButton>
                                 </TableCell>
                             </TableRow>

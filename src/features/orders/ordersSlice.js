@@ -1,5 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {cancelOrder, createOrderFromCart, fetchOrderById, fetchOrders} from "./ordersOperations";
+import {cancelOrder, createOrderFromCart, createPaymentSession, fetchOrderById, fetchOrders} from "./ordersOperations";
 
 const initialState = {
     orders: [],
@@ -59,7 +59,19 @@ const ordersSlice = createSlice({
             .addCase(cancelOrder.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.payload;
-            });
+            })
+            .addCase(createPaymentSession.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(createPaymentSession.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.sessionId = action.payload.sessionId;
+            })
+            .addCase(createPaymentSession.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload;
+            })
+
     },
 });
 

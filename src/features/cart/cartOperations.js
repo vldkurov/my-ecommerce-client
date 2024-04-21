@@ -50,7 +50,7 @@ export const deleteProductFromCart = createAsyncThunk(
             const response = await api.delete(`/carts/${cartId}/items/${itemId}`);
 
             if (!response) {
-                throw new Error('Failed to delete the item');
+                return rejectWithValue('Failed to delete the item');
             }
             return response.data.cartItemId;
         } catch (error) {
@@ -58,6 +58,9 @@ export const deleteProductFromCart = createAsyncThunk(
         }
     }
 );
+
+
+
 
 
 

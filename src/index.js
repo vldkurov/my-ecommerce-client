@@ -5,15 +5,26 @@ import {store} from './app/store';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
+import {loadStripe} from "@stripe/stripe-js";
+import {Elements} from "@stripe/react-stripe-js";
+
+const stripeApiKey = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY;
+const stripePromise = loadStripe(stripeApiKey);
+if (!stripeApiKey) {
+    console.error("Stripe API key is undefined. Check your .env file and ensure it is loaded correctly.");
+}
 
 const container = document.getElementById('root');
 const root = createRoot(container);
 
+
 root.render(
     <React.StrictMode>
-        <Provider store={store}>
-            <App/>
-        </Provider>
+        <Elements stripe={stripePromise}>
+            <Provider store={store}>
+                <App/>
+            </Provider>
+        </Elements>
     </React.StrictMode>
 );
 

@@ -6,6 +6,7 @@ import {globalStyles} from "./App.styled";
 import {Global} from "@emotion/react";
 import AuthLayout from "./components/auth/AuthLayout/AuthLayout";
 
+
 function App() {
     return (
         <AuthLayout>
