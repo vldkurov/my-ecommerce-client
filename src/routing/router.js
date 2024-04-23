@@ -1,6 +1,7 @@
 import {Route, Routes,} from "react-router-dom";
 import {lazy, Suspense} from "react";
 import Layout from "../components/common/Layout/Layout";
+import RequireAuth from "../components/RequireAuth/RequireAuth";
 
 
 const HomePage = lazy(() => import('../pages/HomePage/HomePage'));
@@ -22,22 +23,25 @@ const AppRoutes = () => {
         <Layout>
             <Suspense fallback={<div>Loading...</div>}> {/* Provide a fallback */}
                 <Routes>
+                    {/* Public Routes */}
                     <Route path="/" element={<HomePage/>}/>
                     <Route path="/register" element={<RegisterPage/>}/>
                     <Route path="/login" element={<LoginPage/>}/>
                     <Route path="/products/all" element={<ProductsPage/>}/>
                     <Route path="/products/all/:categoryId" element={<ProductsByCategoryPage/>}/>
                     <Route path="/products/:productId" element={<ProductDetailsPage/>}/>
-                    <Route path="/cart/:cartId" element={<CartPage/>}/>
-                    <Route path="/carts/:cartId/checkout" element={<CheckoutPage/>}/>
-                    <Route path="/orders" element={<OrdersPage/>}/>
-                    <Route path="/orders/:orderId" element={<OrderDetailsPage/>}/>
-                    {/*<Route path="/protected" element={<PrivateRoute element={<ProtectedPage/>}/>}/>*/}
+                    {/* Protected Routes */}
+                    <Route path="/cart/:cartId" element={<RequireAuth><CartPage/></RequireAuth>}/>
+                    <Route path="/carts/:cartId/checkout" element={<RequireAuth><CheckoutPage/></RequireAuth>}/>
+                    <Route path="/orders" element={<RequireAuth><OrdersPage/></RequireAuth>}/>
+                    <Route path="/orders/:orderId" element={<RequireAuth><OrderDetailsPage/></RequireAuth>}/>
+                    {/* Fallback for unmatched routes */}
                     <Route path="*" element={<NotFoundPage/>}/>
                 </Routes>
             </Suspense>
         </Layout>
     )
 }
+
 
 export default AppRoutes
