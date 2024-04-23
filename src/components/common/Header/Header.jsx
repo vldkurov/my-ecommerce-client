@@ -42,7 +42,6 @@ function Header() {
             });
     };
 
-
     return (
         <StyledAppBar position="static">
             <StyledToolbar>
@@ -69,10 +68,6 @@ function Header() {
                                            $isactive={location.pathname.includes(`/cart/${cartId}`)}>
                                 <ShoppingCartIcon/> Cart ({cartItemCount})
                             </StyledNavLink>
-                            {/*<StyledNavLink component={RouterNavLink} to="/checkout"*/}
-                            {/*               $isactive={location.pathname === '/checkout'}>*/}
-                            {/*    Checkout*/}
-                            {/*</StyledNavLink>*/}
                             <StyledNavLink component={RouterNavLink} to="/orders"
                                            $isactive={location.pathname === '/orders'}>
                                 Orders
