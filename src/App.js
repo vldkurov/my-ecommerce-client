@@ -5,14 +5,17 @@ import AppRoutes from "./routing/router";
 import {globalStyles} from "./App.styled";
 import {Global} from "@emotion/react";
 import AuthLayout from "./components/auth/AuthLayout/AuthLayout";
-
+import {ThemeProvider} from "@mui/material";
+import theme from './theme'
 
 function App() {
     return (
         <AuthLayout>
             <Router>
                 <Global styles={globalStyles}/>
-                <AppRoutes/>
+                <ThemeProvider theme={theme}>
+                    <AppRoutes/>
+                </ThemeProvider>
             </Router>
         </AuthLayout>
     );
