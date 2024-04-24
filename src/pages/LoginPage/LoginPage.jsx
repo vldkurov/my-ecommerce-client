@@ -6,6 +6,8 @@ import {ButtonContainer, FacebookButton, GoogleButton} from "./LoginPage.styled"
 import GoogleIcon from '@mui/icons-material/Google';
 import FacebookIcon from '@mui/icons-material/Facebook';
 
+const baseURL = process.env.REACT_APP_BASE_URL
+
 const LoginPage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -26,11 +28,11 @@ const LoginPage = () => {
         <>
             <LoginForm onSubmit={onLogin}/>
             <ButtonContainer>
-                <GoogleButton onClick={() => window.location.href = 'http://localhost:3030/api/users/auth/google'}>
+                <GoogleButton onClick={() => window.location.href = `${baseURL}/users/auth/google`}>
                     <GoogleIcon/>
                     Login with Google
                 </GoogleButton>
-                <FacebookButton onClick={() => window.location.href = '/auth/facebook'} disabled>
+                <FacebookButton onClick={() => window.location.href = `${baseURL}/users/auth/facebook`} disabled>
                     <FacebookIcon/>
                     Login with Facebook
                 </FacebookButton>
