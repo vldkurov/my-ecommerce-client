@@ -28,6 +28,7 @@ export const login = createAsyncThunk('auth/login', async (loginData, {dispatch,
             dispatch(fetchCartContents(response.data.user.cartId));  // Автоматически загружаем содержимое корзины
         }
         return response.data; // This should include the user object or relevant user data
+//             return response.data;
     } catch (error) {
         if (!error.response) {
             throw error;
@@ -60,7 +61,6 @@ export const logout = createAsyncThunk('user/logout', async (_, {rejectWithValue
 //                 await dispatch(fetchCartContents(response.data.user.cartId));
 //             }
 //
-//             return response.data;
 //         } catch (error) {
 //             return rejectWithValue(error.response ? error.response.data : error.message);
 //         }
