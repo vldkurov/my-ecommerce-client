@@ -5,7 +5,7 @@ import {StyledButton, StyledCardActions} from './ProductCard.styled';
 
 const ProductCard = ({product}) => {
     const {
-        imageUrl,
+        // imageUrl,
         name,
         description,
         price,
@@ -17,7 +17,7 @@ const ProductCard = ({product}) => {
         <Card sx={{height: '100%', display: 'flex', flexDirection: 'column'}}>
             <CardMedia
                 component="img"
-                image={imageUrl || placeholderImage}
+                image={placeholderImage}
                 alt={name}
                 sx={{height: 140, objectFit: 'cover'}}
             />
