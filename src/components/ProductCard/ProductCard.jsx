@@ -1,7 +1,8 @@
 import React from 'react';
-import {Card, CardContent, CardMedia, Typography} from '@mui/material';
+import {Box, Card, CardContent, Typography} from '@mui/material';
 import {Link} from 'react-router-dom';
 import {StyledButton, StyledCardActions} from './ProductCard.styled';
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 
 const ProductCard = ({product}) => {
     const {
@@ -11,16 +12,26 @@ const ProductCard = ({product}) => {
         price,
         category
     } = product;
-    const placeholderImage = '/path-to-default-image.jpg';
+    // const placeholderImage = '/path-to-default-image.jpg';
 
     return (
         <Card sx={{height: '100%', display: 'flex', flexDirection: 'column'}}>
-            <CardMedia
-                component="img"
-                image={placeholderImage}
-                alt={name}
-                sx={{height: 140, objectFit: 'cover'}}
-            />
+            {/*<CardMedia*/}
+            {/*    component="img"*/}
+            {/*    image={placeholderImage}*/}
+            {/*    alt={name}*/}
+            {/*    sx={{height: 140, objectFit: 'cover'}}*/}
+            {/*/>*/}
+            <Box sx={{
+                height: 140,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: 'primary.main',
+                color: 'common.white'
+            }}>
+                <PhotoCameraIcon fontSize="large"/> {/* Добавление иконки */}
+            </Box>
             <CardContent sx={{
                 flexGrow: 1,
                 display: 'flex',
