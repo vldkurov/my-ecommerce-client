@@ -51,30 +51,48 @@ export const logout = createAsyncThunk('user/logout', async (_, {rejectWithValue
 
 export const check = createAsyncThunk(
     'user/checkStatus',
-    async (_, {dispatch, getState, rejectWithValue}) => {
-        // Assuming your state shape includes some indication of authentication
-        if (!getState().auth.isAuthenticated) {
-            // Skip the check if we know the user is not authenticated
-            return rejectWithValue('User not authenticated');
-        }
-
+    async (_, {dispatch, rejectWithValue}) => {
         try {
             const response = await api.get('/users/check', {withCredentials: true});
 
+
             if (response.data.isAuthenticated && response.data.user.cartId) {
+
                 await dispatch(fetchCartContents(response.data.user.cartId));
             }
 
-            return response.data;
         } catch (error) {
-            if (error.response && error.response.status === 401) {
-                // Handle 401 specifically, possibly resetting auth state
-                return rejectWithValue('Session expired');
-            }
             return rejectWithValue(error.response ? error.response.data : error.message);
         }
     }
 );
+
+// export const check = createAsyncThunk(
+//     'user/checkStatus',
+//     async (_, {dispatch, getState, rejectWithValue}) => {
+//         // Assuming your state shape includes some indication of authentication
+//         if (!getState().auth.isAuthenticated) {
+//             // Skip the check if we know the user is not authenticated
+//             return rejectWithValue('User not authenticated');
+//         }
+//
+//         try {
+//             const response = await api.get('/users/check', {withCredentials: true});
+//
+//             if (response.data.isAuthenticated && response.data.user.cartId) {
+//                 await dispatch(fetchCartContents(response.data.user.cartId));
+//             }
+//
+//             return response.data;
+//         } catch (error) {
+//             if (error.response && error.response.status === 401) {
+//                 // Handle 401 specifically, possibly resetting auth state
+//                 return rejectWithValue('Session expired');
+//             }
+//             return rejectWithValue(error.response ? error.response.data : error.message);
+//         }
+//     }
+// );
 
 
 
