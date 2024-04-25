@@ -9,5 +9,7 @@ const api = axios.create({
     withCredentials: true  // This should be set if you are using session cookies
 });
 
+api.defaults.withCredentials = true;
+
 
 export default api;
