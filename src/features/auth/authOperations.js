@@ -49,24 +49,6 @@ export const logout = createAsyncThunk('user/logout', async (_, {rejectWithValue
 });
 
 
-// export const check = createAsyncThunk(
-//     'user/checkStatus',
-//     async (_, {dispatch, rejectWithValue}) => {
-//         try {
-//             const response = await api.get('/users/check', {withCredentials: true});
-//
-//
-//             if (response.data.isAuthenticated && response.data.user.cartId) {
-//
-//                 await dispatch(fetchCartContents(response.data.user.cartId));
-//             }
-//
-//         } catch (error) {
-//             return rejectWithValue(error.response ? error.response.data : error.message);
-//         }
-//     }
-// );
-
 export const check = createAsyncThunk(
     'user/checkStatus',
     async (_, {dispatch, getState, rejectWithValue}) => {
