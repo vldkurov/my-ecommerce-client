@@ -1,10 +1,11 @@
 import React from 'react';
-import {Box, Card, CardContent, Typography} from '@mui/material';
+import {Box, Card, CardContent, Typography, useTheme} from '@mui/material';
 import {Link} from 'react-router-dom';
 import {StyledButton, StyledCardActions} from './ProductCard.styled';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 
 const ProductCard = ({product}) => {
+    const theme = useTheme();
     const {
         // imageUrl,
         name,
@@ -12,13 +13,12 @@ const ProductCard = ({product}) => {
         price,
         category
     } = product;
-    // const placeholderImage = '/path-to-default-image.jpg';
 
     return (
         <Card sx={{height: '100%', display: 'flex', flexDirection: 'column'}}>
             {/*<CardMedia*/}
             {/*    component="img"*/}
-            {/*    image={placeholderImage}*/}
+            {/*    image={'/path-to-default-image.jpg'}
             {/*    alt={name}*/}
             {/*    sx={{height: 140, objectFit: 'cover'}}*/}
             {/*/>*/}
@@ -27,8 +27,8 @@ const ProductCard = ({product}) => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                backgroundColor: 'primary.main',
-                color: 'common.white'
+                backgroundColor: theme.palette.placeholder.main,
+                color: theme.palette.placeholder.contrastText
             }}>
                 <PhotoCameraIcon fontSize="large"/> {/* Добавление иконки */}
             </Box>

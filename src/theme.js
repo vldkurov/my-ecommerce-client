@@ -9,6 +9,10 @@ const theme = createTheme({
         secondary: {
             main: '#3B5998', // Facebook blue
             contrastText: '#ffffff'
+        },
+        placeholder: {
+            main: '#d3d3d3', // Light gray for placeholder
+            contrastText: '#ffffff'
         }
     },
 });

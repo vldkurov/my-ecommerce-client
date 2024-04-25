@@ -3,11 +3,12 @@ import {useNavigate, useParams} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchProductDetails} from '../../features/product/productOperations';
 import {addProductToCart, createCart, fetchCartContents} from '../../features/cart/cartOperations'; // Import the thunks
-import {Alert, Box, Card, CardContent, Snackbar, TextField, Typography} from '@mui/material';
+import {Alert, Box, Card, CardContent, Snackbar, TextField, Typography, useTheme} from '@mui/material';
 import {StyledButton} from "./ProductDetailsPage.styled";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 
 const ProductDetailsPage = () => {
+    const theme = useTheme();
     const {productId} = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -73,7 +74,7 @@ const ProductDetailsPage = () => {
             {/*<CardMedia*/}
             {/*    component="img"*/}
             {/*    height="250"*/}
-            {/*    image={product.imageUrl || '/path-to-default-image.jpg'}*/}
+            {/*    image={/path-to-default-image.jpg'}
             {/*    alt={product.name}*/}
             {/*/>*/}
             <Box sx={{
@@ -81,8 +82,8 @@ const ProductDetailsPage = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                backgroundColor: 'primary.main',
-                color: 'common.white'
+                backgroundColor: theme.palette.placeholder.main,
+                color: theme.palette.placeholder.contrastText
             }}>
                 <PhotoCameraIcon fontSize="large"/> {/* Добавление иконки */}
             </Box>
