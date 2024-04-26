@@ -3,18 +3,40 @@ import api from "../../api/api";
 import {fetchCartContents} from "../cart/cartOperations";
 
 
+// export const register = createAsyncThunk('auth/register', async (userData, {rejectWithValue}) => {
+//     try {
+//         const response = await api.post('/users/register', userData, {
+//             withCredentials: true // Ensures cookies are sent with the request
+//         });
+//         // Assume the response body includes the user data you want to store
+//         return response.data; // This should include the user object
+//     } catch (error) {
+//         if (!error.response) {
+//             throw error;
+//         }
+//         return rejectWithValue(error.response.data);
+//     }
+// });
+
 export const register = createAsyncThunk('auth/register', async (userData, {rejectWithValue}) => {
     try {
-        const response = await api.post('/users/register', userData, {
-            withCredentials: true // Ensures cookies are sent with the request
-        });
-        // Assume the response body includes the user data you want to store
-        return response.data; // This should include the user object
+        const response = await api.post('/users/register', userData);
+        // The server should return user details and tokens in the response
+        const {user, accessToken, refreshToken} = response.data;
+
+        // Store the JWTs in storage
+        localStorage.setItem('accessToken', accessToken);
+        if (refreshToken) {
+            localStorage.setItem('refreshToken', refreshToken);
+        }
+
+        // Return data to be used by your reducer or further application logic
+        return {user, accessToken, refreshToken};
     } catch (error) {
         if (!error.response) {
-            throw error;
+            throw error; // Handle unexpected errors
         }
-        return rejectWithValue(error.response.data);
+        return rejectWithValue(error.response.data); // Handle API errors
     }
 });
 
@@ -27,8 +49,7 @@ export const login = createAsyncThunk('auth/login', async (loginData, {dispatch,
         if (response.data.user && response.data.user.cartId) {
             dispatch(fetchCartContents(response.data.user.cartId));  // Автоматически загружаем содержимое корзины
         }
-        return response.data; // This should include the user object or relevant user data
-//             return response.data;
+        return response.data
     } catch (error) {
         if (!error.response) {
             throw error;
@@ -49,50 +70,50 @@ export const logout = createAsyncThunk('user/logout', async (_, {rejectWithValue
 });
 
 
-export const check = createAsyncThunk(
-    'user/checkStatus',
-    async (_, {dispatch, rejectWithValue}) => {
-        try {
-            const response = await api.get('/users/check', {withCredentials: true});
-
-
-            if (response.data.isAuthenticated && response.data.user.cartId) {
-
-                await dispatch(fetchCartContents(response.data.user.cartId));
-            }
-
-        } catch (error) {
-            return rejectWithValue(error.response ? error.response.data : error.message);
-        }
-    }
-);
-
 // export const check = createAsyncThunk(
 //     'user/checkStatus',
-//     async (_, {dispatch, getState, rejectWithValue}) => {
-//         // Assuming your state shape includes some indication of authentication
-//         if (!getState().auth.isAuthenticated) {
-//             // Skip the check if we know the user is not authenticated
-//             return rejectWithValue('User not authenticated');
-//         }
-//
+//     async (_, {dispatch, rejectWithValue}) => {
 //         try {
 //             const response = await api.get('/users/check', {withCredentials: true});
 //
+//
 //             if (response.data.isAuthenticated && response.data.user.cartId) {
+//
 //                 await dispatch(fetchCartContents(response.data.user.cartId));
 //             }
 //
-//             return response.data;
 //         } catch (error) {
-//             if (error.response && error.response.status === 401) {
-//                 // Handle 401 specifically, possibly resetting auth state
-//                 return rejectWithValue('Session expired');
-//             }
 //             return rejectWithValue(error.response ? error.response.data : error.message);
 //         }
 //     }
 // );
+
+export const check = createAsyncThunk(
+    'user/checkStatus',
+    async (_, {dispatch, getState, rejectWithValue}) => {
+        // Assuming your state shape includes some indication of authentication
+        if (!getState().auth.isAuthenticated) {
+            // Skip the check if we know the user is not authenticated
+            return rejectWithValue('User not authenticated');
+        }
+
+        try {
+            const response = await api.get('/users/check', {withCredentials: true});
+
+            if (response.data.isAuthenticated && response.data.user.cartId) {
+                await dispatch(fetchCartContents(response.data.user.cartId));
+            }
+
+            return response.data;
+        } catch (error) {
+            if (error.response && error.response.status === 401) {
+                // Handle 401 specifically, possibly resetting auth state
+                return rejectWithValue('Session expired');
+            }
+            return rejectWithValue(error.response ? error.response.data : error.message);
+        }
+    }
+);
 
 
 
