@@ -63,6 +63,7 @@ export const login = createAsyncThunk('auth/login', async (loginData, {dispatch,
         const response = await api.post('/users/login', loginData);
         const {user, accessToken, refreshToken} = response.data;
 
+        console.log('response.data', response.data);
         console.log('user', user);
 
         if (user && user.cartId) {
