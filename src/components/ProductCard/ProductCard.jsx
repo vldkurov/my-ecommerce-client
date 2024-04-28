@@ -30,7 +30,7 @@ const ProductCard = ({product}) => {
                 backgroundColor: theme.palette.placeholder.main,
                 color: theme.palette.placeholder.contrastText
             }}>
-                <PhotoCameraIcon fontSize="large"/> {/* Добавление иконки */}
+                <PhotoCameraIcon fontSize="large"/>
             </Box>
             <CardContent sx={{
                 flexGrow: 1,

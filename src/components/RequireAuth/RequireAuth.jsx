@@ -5,9 +5,7 @@ import {useSelector} from 'react-redux';
 const RequireAuth = ({children}) => {
     const {isAuthenticated} = useSelector((state) => state.auth);
     const location = useLocation();
-    // const queryParams = queryString.parse(location.search);
 
-    // const isCheckoutSession = queryParams.session_id;
 
     const isOrderRoute = location.pathname.startsWith('/orders/');
 

@@ -51,9 +51,7 @@ const cartSlice = createSlice({
             })
             .addCase(fetchCartContents.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                // state.cart = action.payload.cart; // Update the cart object
                 state.cart = action.payload
-                // state.items = action.payload.items; // Update the items array
                 state.items = action.payload || [];
             })
             .addCase(fetchCartContents.rejected, (state, action) => {

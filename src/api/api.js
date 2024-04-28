@@ -9,7 +9,6 @@ const api = axios.create({
     withCredentials: true  // This should be set if you are using session cookies
 });
 
-// api.defaults.withCredentials = true;
 
 api.interceptors.response.use(response => response, async (error) => {
     const originalRequest = error.config;

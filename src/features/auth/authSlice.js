@@ -14,7 +14,15 @@ const initialState = {
 const authSlice = createSlice({
     name: 'auth',
     initialState,
-    reducers: {},
+    reducers: {
+        setUserData(state, action) {
+            state.user = action.payload;
+            state.isAuthenticated = true;
+            state.status = 'succeeded';
+            state.loading = false;
+            state.error = null;
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(register.pending, (state) => {
@@ -43,7 +51,7 @@ const authSlice = createSlice({
             .addCase(login.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.loading = false;
-                state.user = action.payload.user; // Assume payload contains user data
+                state.user = action.payload; // Assume payload contains user data
                 state.isAuthenticated = true;
                 state.error = null;
             })
@@ -88,4 +96,6 @@ const authSlice = createSlice({
     },
 });
 
+
+export const {setUserData} = authSlice.actions;
 export default authSlice.reducer;

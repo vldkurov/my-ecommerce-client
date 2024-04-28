@@ -1,16 +1,13 @@
-import React, {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React from 'react';
 import ProductCard from "../../components/ProductCard/ProductCard";
 import Box from '@mui/material/Box';
-import {fetchProducts} from '../../features/products/productsOperations';
+import {useFetchProducts, useProductData} from "../../hooks";
 
 const ProductsPage = ({categoryId}) => {
-    const dispatch = useDispatch();
-    const {products, status, error} = useSelector((state) => state.products);
 
-    useEffect(() => {
-        dispatch(fetchProducts(categoryId));
-    }, [dispatch, categoryId]);
+    useFetchProducts(categoryId);
+
+    const {products, status, error} = useProductData();
 
     if (status === 'loading') return <p>Loading...</p>;
     if (status === 'failed') return <p>Error: {error}</p>;

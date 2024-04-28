@@ -7,11 +7,13 @@ export const fetchProducts = createAsyncThunk(
         try {
             const params = categoryId ? {category: categoryId} : {};
             const response = await api.get('/products/all', {params});
+
             return response.data;
         } catch (error) {
             return rejectWithValue(error.response.data);
         }
     }
 );
+
 
 

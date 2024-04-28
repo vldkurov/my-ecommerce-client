@@ -13,8 +13,6 @@ const rootReducer = combineReducers({
     categories: categoriesReducer,
     cart: cartReducer,
     orders: ordersReducer,
-    // user: userReducer,
-    // Add other slice reducers here as needed
 });
 
 export default rootReducer;

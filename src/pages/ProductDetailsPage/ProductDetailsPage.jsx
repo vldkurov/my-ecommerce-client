@@ -119,7 +119,7 @@ const ProductDetailsPage = () => {
                             onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value, 10)))}
                             inputProps={{min: 1}}
                             size="small"
-                            sx={{width: '80px', mr: 2}} // Adjust width as needed
+                            sx={{width: '80px', mr: 2}}
                         />
                         <StyledButton onClick={handleAddToCart}>Add to Cart</StyledButton>
                     </Box>
