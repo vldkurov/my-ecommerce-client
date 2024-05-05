@@ -12,6 +12,7 @@ const ProductDetailsPage = () => {
     const {productId} = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
     const {product, status, error} = useSelector((state) => state.product);
     const [quantity, setQuantity] = useState(1); // State to track selected quantity
     const cart = useSelector((state) => state.cart.cart); // Assuming cart state structure
@@ -23,8 +24,13 @@ const ProductDetailsPage = () => {
     }, [dispatch, productId]);
 
     const handleAddToCart = async () => {
-        let currentCartId = cart?.cartId;
 
+        if (!isAuthenticated) {
+            navigate('/login');
+            return;
+        }
+
+        let currentCartId = cart?.cartId;
 
         if (!currentCartId) {
             const newCartAction = await dispatch(createCart());
@@ -121,7 +127,8 @@ const ProductDetailsPage = () => {
                             size="small"
                             sx={{width: '80px', mr: 2}}
                         />
-                        <StyledButton onClick={handleAddToCart}>Add to Cart</StyledButton>
+                        <StyledButton onClick={handleAddToCart}>Add to
+                            Cart</StyledButton>
                     </Box>
                     {/* Back to Products List Button */}
                     <StyledButton size="small" onClick={handleBack}>
